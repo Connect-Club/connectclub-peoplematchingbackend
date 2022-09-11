@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "strict": true,
+    "baseUrl": "./src/typings",
+    "typeRoots": [
+      "src/typings",
+      "node_modules/@types"
+    ]
+  }
+}

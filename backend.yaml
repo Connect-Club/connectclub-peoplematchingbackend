@@ -1,0 +1,79 @@
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: back-node-backendconfig
+  namespace: stage
+spec:
+  timeoutSec: 1200
+  connectionDraining:
+    drainingTimeoutSec: 180
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: stage
+  annotations:
+    beta.cloud.google.com/backend-config: '{"ports": {"8000":"back-node-backendconfig"}}'
+  labels:
+    app: backend
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: backend
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: stage
+data:
+  NODE_ENV: production
+  POSTGRES_URL: 35.228.179.1
+  POSTGRES_USER: postgres
+  POSTGRES_PASS: password
+  POSTGRES_DB: connect_club
+  NEO4J_URL: neo4j://10.196.15.238
+  NEO4J_USER: neo4j
+  NEO4J_PASS: neo4j
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: stage
+  labels:
+    app: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      nodeSelector:
+        node-pool: apps
+      containers:
+        - image: ''
+          name: backend
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 240
+            timeoutSeconds: 30
+          envFrom:
+            - configMapRef:
+                name: backend-config
+          ports:
+            - containerPort: 80
+              name: backend

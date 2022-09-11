@@ -1,0 +1,81 @@
+{
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "extends": [
+    "prettier",
+    "plugin:prettier/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "simple-import-sort",
+    "prettier",
+    "import"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "impliedStrict": true
+    }
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn"
+    ],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": [
+      "warn"
+    ],
+    "simple-import-sort/imports": "warn",
+    "react/prop-types": "off",
+    "react/display-name": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "./src/**/*.tsx",
+        "./src/**/*.ts"
+      ],
+      "rules": {
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              [
+                "^\\u0000"
+              ],
+              [
+                "^@?\\w"
+              ],
+              [
+                "^[^.]"
+              ],
+              [
+                "src/model"
+              ],
+              [
+                "src/routes"
+              ],
+              [
+                "src/utils"
+              ],
+              [
+                "src/.."
+              ],
+              [
+                "^\\."
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
